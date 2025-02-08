@@ -5,29 +5,28 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
+// Les variables d'environnement ont déjà été chargées dans server.js
+const frontEndUrl = process.env.BASE_URL ;
+
+// Configuration du CORS avec l'URL du front-end définie dans .env
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [frontEndUrl],
     credentials: true,
   })
 );
 
 app.use(express.json());
 app.use(cookieParser());
+
+// Route de test
 app.use("/test", (req, res) => {
   res.send("Hello world!");
 });
 
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 
-// config
-if (process.env.NODE_ENV !== "PRODUCTION") {
-  require("dotenv").config({
-    path: "config/.env",
-  });
-}
-
-// import routes
+// Importation des routes
 const user = require("./controller/user");
 const shop = require("./controller/shop");
 const product = require("./controller/product");
@@ -50,7 +49,7 @@ app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);
 app.use("/api/v2/withdraw", withdraw);
 
-// it's for ErrorHandling
+// Middleware de gestion des erreurs
 app.use(ErrorHandler);
 
 module.exports = app;
