@@ -39,8 +39,7 @@ router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
 
     const activationToken = createActivationToken(seller);
 
-    const activationUrl = `https://eshop-tutorial-pyri.vercel.app/seller/activation/${activationToken}`;
-
+    const activationUrl = `${process.env.BASE_URL}/seller/activation/${activationToken}`;
     try {
       await sendMail({
         email: seller.email,

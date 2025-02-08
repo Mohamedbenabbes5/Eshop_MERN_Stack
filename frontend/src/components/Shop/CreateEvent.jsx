@@ -5,10 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { toast } from "react-toastify";
 import { createevent } from "../../redux/actions/event";
+import { ClipLoader } from "react-spinners";
 
 const CreateEvent = () => {
   const { seller } = useSelector((state) => state.seller);
-  const { success, error } = useSelector((state) => state.events);
+  const { success, error ,isLoading } = useSelector((state) => state.events);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -49,14 +50,16 @@ const CreateEvent = () => {
 
   useEffect(() => {
     if (error) {
+      console.log("errrrrrrrrrrrrror", error);
       toast.error(error);
     }
     if (success) {
+      console.log("success success success", success);
       toast.success("Event created successfully!");
-      navigate("/dashboard-events");
+      navigate("/dashboard");
       window.location.reload();
     }
-  }, [dispatch, error, success]);
+  }, [dispatch, error, success, navigate]);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -100,7 +103,7 @@ const CreateEvent = () => {
   };
 
   return (
-    <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+    <div className="w-[90%] 800px:w-[70%] bg-white  shadow h-[100vh] rounded-[4px] p-3 overflow-y-scroll">
       <h5 className="text-[30px] font-Poppins text-center">Create Event</h5>
       {/* create event form */}
       <form onSubmit={handleSubmit}>
@@ -267,11 +270,17 @@ const CreateEvent = () => {
           </div>
           <br />
           <div>
-            <input
+            <button
               type="submit"
               value="Create"
-              className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+              className="mt-2 justify-center cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  sm:text-sm bg-[#dc1c42] text-white hover:bg-[#ec5271] transition-colors duration-200"
+            >
+              {isLoading ? (
+                <ClipLoader color="#ffff" size={35} /> // No margin on the loader
+              ) : (
+                "Create" // Show "Submit" text when not loading
+              )}
+            </button>
           </div>
         </div>
       </form>

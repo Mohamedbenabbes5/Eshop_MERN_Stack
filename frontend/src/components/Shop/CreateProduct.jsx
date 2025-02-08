@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../redux/actions/product";
 import { categoriesData } from "../../static/data";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 
 const CreateProduct = () => {
   const { seller } = useSelector((state) => state.seller);
-  const { success, error } = useSelector((state) => state.products);
-  const navigate = useNavigate();
+  const { success, error, isLoading } = useSelector((state) => state.products);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [images, setImages] = useState([]);
   const [name, setName] = useState("");
@@ -30,7 +31,7 @@ const CreateProduct = () => {
       navigate("/dashboard");
       window.location.reload();
     }
-  }, [dispatch, error, success]);
+  }, [dispatch, error, success, navigate]);
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -81,7 +82,7 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className="w-[90%] 800px:w-[50%] bg-white  shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">
+    <div className="w-[90%] 800px:w-[70%] bg-white  shadow h-[100vh] rounded-[4px] p-3 overflow-y-scroll ">
       <h5 className="text-[30px] font-Poppins text-center">Create Product</h5>
       {/* create product form */}
       <form onSubmit={handleSubmit}>
@@ -216,11 +217,17 @@ const CreateProduct = () => {
           </div>
           <br />
           <div>
-            <input
+            <button
               type="submit"
               value="Create"
-              className="mt-2 cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+              className="mt-2 justify-center cursor-pointer appearance-none text-center block w-full px-3 h-[35px] border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none  sm:text-sm bg-[#dc1c42] text-white hover:bg-[#ec5271] transition-colors duration-200"
+            >
+              {isLoading ? (
+                <ClipLoader color="#ffff" size={35} /> // No margin on the loader
+              ) : (
+                "Create" // Show "Submit" text when not loading
+              )}
+            </button>
           </div>
         </div>
       </form>

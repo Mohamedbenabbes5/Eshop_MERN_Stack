@@ -57,7 +57,7 @@ const Header = ({ activeHeading }) => {
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
-              <img src={logo} alt="Logo" className="w-32 " />
+              <img src={logo} alt="Logo" className="w-14 " />
             </Link>
           </div>
           {/* search box */}
@@ -214,9 +214,9 @@ const Header = ({ activeHeading }) => {
           <div>
             <Link to="/">
               <img
-                src="https://shopo.quomodothemes.website/assets/images/logo.svg"
+                src={logo}
                 alt=""
-                className="mt-3 cursor-pointer"
+                className="cursor-pointer w-12  p-0 m-0 mt-1"
               />
             </Link>
           </div>
@@ -243,7 +243,7 @@ const Header = ({ activeHeading }) => {
           <div
             className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}
           >
-            <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll">
+            <div className="fixed w-[70%] bg-[#fff] h-full top-0 left-0 z-10 overflow-y-scroll">
               <div className="w-full justify-between flex pr-3">
                 <div>
                   <div

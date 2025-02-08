@@ -5,15 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import logo from "../../Assests/logo.png";
+import { ClipLoader } from "react-spinners";
 
 const ShopLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     await axios
       .post(
@@ -27,11 +31,12 @@ const ShopLogin = () => {
       .then((res) => {
         toast.success("Login Success!");
         navigate("/dashboard");
-        window.location.reload(true); 
+        window.location.reload(true);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -40,6 +45,11 @@ const ShopLogin = () => {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Login to your shop
         </h2>
+        <div className="mt-6">
+          <Link to="/">
+            <img src={logo} alt="Logo" className="w-14 mx-auto" />
+          </Link>
+        </div>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
@@ -122,9 +132,14 @@ const ShopLogin = () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="group relative w-full h-[40px] flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                disabled={isloading} // Disable the button during loading
               >
-                Submit
+                {isloading ? (
+                  <ClipLoader color="#ffff" size={35} /> // No margin on the loader
+                ) : (
+                  "Submit" // Show "Submit" text when not loading
+                )}
               </button>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>

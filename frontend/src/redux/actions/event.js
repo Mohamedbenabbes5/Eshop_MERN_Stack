@@ -8,10 +8,13 @@ export const createevent = (data) => async (dispatch) => {
       type: "eventCreateRequest",
     });
 
-    const { d } = await axios.post(`${server}/event/create-event`, data);
+    const { data: response } = await axios.post(
+      `${server}/event/create-event`,
+      data
+    ); // Correction ici
     dispatch({
       type: "eventCreateSuccess",
-      payload: d.event,
+      payload: response.event, // Utilisez `response.event` au lieu de `d.event`
     });
   } catch (error) {
     dispatch({
@@ -20,7 +23,6 @@ export const createevent = (data) => async (dispatch) => {
     });
   }
 };
-
 // get all events of a shop
 export const getAllEventsShop = (id) => async (dispatch) => {
   try {
@@ -62,7 +64,7 @@ export const deleteEvent = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "deleteeventFailed",
-      payload: error.response.data.message,
+      payload: error,
     });
   }
 };
@@ -82,7 +84,7 @@ export const getAllEvents = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: "getAlleventsFailed",
-      payload: error.response.data.message,
+      payload: error?.response?.data?.message,
     });
   }
 };

@@ -1,11 +1,13 @@
 import { React, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import logo from "../../Assests/logo.png";
+import { ClipLoader } from "react-spinners";
 
 const Singup = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,8 @@ const Singup = () => {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [avatar, setAvatar] = useState(null);
+  const [isloading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileInputChange = (e) => {
     const reader = new FileReader();
@@ -28,6 +32,7 @@ const Singup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     axios
       .post(`${server}/user/create-user`, { name, email, password, avatar })
@@ -37,9 +42,14 @@ const Singup = () => {
         setEmail("");
         setPassword("");
         setAvatar();
+        navigate("/shop-login");
+
       })
       .catch((error) => {
         toast.error(error.response.data.message);
+      })
+      .finally(() => {
+        setIsLoading(false); // Désactiver le chargement, que la requête réussisse ou échoue
       });
   };
 
@@ -49,6 +59,11 @@ const Singup = () => {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Register as a new user
         </h2>
+        <div className="mt-6">
+          <Link to="/">
+            <img src={logo} alt="Logo" className="w-14 mx-auto" />
+          </Link>
+        </div>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
@@ -161,11 +176,16 @@ const Singup = () => {
             </div>
 
             <div>
-              <button
+            <button
                 type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="group relative w-full h-[40px] flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                disabled={isloading} // Disable the button during loading
               >
-                Submit
+                {isloading ? (
+                  <ClipLoader color="#ffff" size={35} /> // No margin on the loader
+                ) : (
+                  "Submit" // Show "Submit" text when not loading
+                )}
               </button>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
